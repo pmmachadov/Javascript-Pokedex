@@ -4,22 +4,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Pokédex</title>
 </head>
 
 <body>
 
-  <title>Pokédex</title>
-  </head>
+  <div class="pokemon">
+    <img id="image" src="" alt="">
+    <p id="pokemon_name"></p>
+    <p id="pokemon-type">Tipo: <span id="type"></span></p>
+    <p id="pokemon-ability"><span id="ability"></span></p>
+    <p id="pokemon-move"><span id="move"></span></p>
+    <p id="weight"><span id="weight"></span></p>
+    <p id="move_ailment"><span id="move_ailment"></span></p>
+    <p id="nature"><span id="nature"></span></p>
+    <p id="pokemon_id"><span id="pokemon_id"></span></p>
+    <p id="types"><span id="types"></span></p>
+    <p id="moves"><span id="moves"></span></p>
 
-  <body>
+  </div>
 
-    <div class="pokemon">
-      <h2>{{ pokemon.name }}</h2>
-      <p>Tipo: {{ pokemon.types[0].name }}</p>
-    </div>
-
-    <script src="./javascript.js" type="application/javascript"></script>
-  </body>
+  <script src="./javascript.js" type="application/javascript"></script>
+</body>
 
 </html>
