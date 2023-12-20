@@ -55,13 +55,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     pokemonCard.className = "card";
     pokemonCard.innerHTML = `
       <h3>${name}</h3>
+      <div class="pokemon-image">
       <img src="${image}" alt="${name}">
-      <p>ID: ${pokemonId}</p>
-      <p>Weight: ${weight}</p>
-      <p>Types: ${types}</p>
-      <p>Moves: ${moves}</p>
-      <p>Ability: ${ability}</p>
-      <p>Move Ailment: ${moveAilment}</p>
+      </div>
+      <div class="card-body">
+      <p><h4>Id:</h4> ${pokemonId}</p>
+      <p><h4>Wheight:</h4> ${weight}</p>
+      <p><h4>Types:</h4> ${types}</p>
+      <p><h4>Moves:</h4> ${moves}</p>
+      <p><h4>Ability:</h4> ${ability}</p>
+      <p><h4>Move Ailment:</h4> ${moveAilment}</p>
+      </div>
     `;
     pokemonContainer.appendChild(pokemonCard);
   }
