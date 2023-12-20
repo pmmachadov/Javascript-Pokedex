@@ -10,50 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       await Promise.all(data.results.map(async (pokemonData) => {
         const pokemon = await fetchPokemonDetails(pokemonData.url);
-
-        const image = pokemon.sprites?.front_default || "N/A";
-        const name = pokemon.name || "N/A";
-        const pokemonId = pokemon.id || "N/A";
-        const weight = pokemon.weight || "N/A";
-        const types = pokemon.types?.map(type => type.type.name).join(', ') || "N/A";
-        const moves = pokemon.moves?.slice(0, 4).map(move => move.move.name).join(', ') || "N/A";
-        const ability = pokemon.abilities?.length > 0 ? pokemon.abilities[0].ability.name : "N/A";
-        const move_ailment = pokemon.moves?.length > 0 && pokemon.moves[0].version_group_details.length > 0
-          ? pokemon.moves[0].version_group_details[0].move_learn_method.name
-          : "N/A";
-
-        // Crear un objeto con la información
-        const pokemonInfo = {
-          name: name,
-          image: image,
-          weight: weight,
-          types: types,
-          moves: moves,
-          ability: ability,
-          move_ailment: move_ailment
-        };
-
-        // Almacenar información en el objeto
-        pokemons[pokemonId] = pokemonInfo;
-
-        // Convertir el objeto a una cadena JSON
-        const pokemonInfoString = JSON.stringify(pokemonInfo);
-
-        // Display information in the HTML
-        const pokemonContainer = document.getElementById("pokemon_container");
-        const pokemonCard = document.createElement("div");
-        pokemonCard.className = "card";
-        pokemonCard.innerHTML = `
-          <h3>${name}</h3>
-          <img src="${image}" alt="${name}">
-          <p>ID: ${pokemonId}</p>
-          <p>Weight: ${weight}</p>
-          <p>Types: ${types}</p>
-          <p>Moves: ${moves}</p>
-          <p>Ability: ${ability}</p>
-          <p>Move Ailment: ${move_ailment}</p>
-        `;
-        pokemonContainer.appendChild(pokemonCard);
+        await processPokemon(pokemon);
       }));
     } else {
       console.error("Failed to fetch data");
@@ -66,5 +23,81 @@ document.addEventListener("DOMContentLoaded", async () => {
     const response = await fetch(url);
     const data = await response.json();
     return data;
+  }
+
+  async function processPokemon(pokemon) {
+    const image = getImage(pokemon);
+    const name = getName(pokemon);
+    const pokemonId = getPokemonId(pokemon);
+    const weight = getWeight(pokemon);
+    const types = getTypes(pokemon);
+    const moves = getMoves(pokemon);
+    const ability = getAbility(pokemon);
+    const moveAilment = getMoveAilment(pokemon);
+
+    // Crear un objeto con la información
+    const pokemonInfo = {
+      name: name,
+      image: image,
+      weight: weight,
+      types: types,
+      moves: moves,
+      ability: ability,
+      moveAilment: moveAilment
+    };
+
+    // Almacenar información en el objeto
+    pokemons[pokemonId] = pokemonInfo;
+
+    // Display information in the HTML
+    const pokemonContainer = document.getElementById("pokemon_container");
+    const pokemonCard = document.createElement("div");
+    pokemonCard.className = "card";
+    pokemonCard.innerHTML = `
+      <h3>${name}</h3>
+      <img src="${image}" alt="${name}">
+      <p>ID: ${pokemonId}</p>
+      <p>Weight: ${weight}</p>
+      <p>Types: ${types}</p>
+      <p>Moves: ${moves}</p>
+      <p>Ability: ${ability}</p>
+      <p>Move Ailment: ${moveAilment}</p>
+    `;
+    pokemonContainer.appendChild(pokemonCard);
+  }
+
+  // Funciones auxiliares para reducir la complejidad
+  function getImage(pokemon) {
+    return pokemon.sprites?.front_default || "N/A";
+  }
+
+  function getName(pokemon) {
+    return pokemon.name || "N/A";
+  }
+
+  function getPokemonId(pokemon) {
+    return pokemon.id || "N/A";
+  }
+
+  function getWeight(pokemon) {
+    return pokemon.weight || "N/A";
+  }
+
+  function getTypes(pokemon) {
+    return pokemon.types?.map(type => type.type.name).join(', ') || "N/A";
+  }
+
+  function getMoves(pokemon) {
+    return pokemon.moves?.slice(0, 4).map(move => move.move.name).join(', ') || "N/A";
+  }
+
+  function getAbility(pokemon) {
+    return pokemon.abilities?.length > 0 ? pokemon.abilities[0].ability.name : "N/A";
+  }
+
+  function getMoveAilment(pokemon) {
+    return pokemon.moves?.length > 0 && pokemon.moves[0].version_group_details.length > 0
+      ? pokemon.moves[0].version_group_details[0].move_learn_method.name
+      : "N/A";
   }
 });
