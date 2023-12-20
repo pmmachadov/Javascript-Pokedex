@@ -1,7 +1,40 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const numberOfPokemon = 10;
-  const url = `https://pokeapi.co/api/v2/pokemon/?limit=${numberOfPokemon}`;
+  // SearchBar
   let pokemons = {};
+
+  // Add the search functionality
+  const searchInput = document.getElementById("search_input");
+  const searchButton = document.getElementById("search_button");
+
+  searchButton.addEventListener("click", () => {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+
+    // Verificar si el campo de búsqueda está vacío o solo contiene espacios
+    if (!searchTerm) {
+      return;
+    }
+
+    // Filter Pokémon that match the search term
+    const filteredPokemon = Object.values(pokemons).filter(pokemon => {
+      const pokemonName = pokemon.name.toLowerCase();
+      const pokemonId = String(pokemon.id);
+
+      return pokemonName.includes(searchTerm) || pokemonId.includes(searchTerm);
+    });
+
+    // Clear the container before showing the search results
+    const pokemonContainer = document.getElementById("pokemon_container");
+    pokemonContainer.innerHTML = "";
+
+    // Show the search results
+    filteredPokemon.forEach(pokemon => {
+      processPokemon(pokemon);
+    });
+  });
+
+  // Cards
+
+  const url = `https://pokeapi.co/api/v2/pokemon?limit=1000`; // Cambiado a límite 1000 para obtener todos los Pokémon
 
   try {
     const response = await fetch(url);
@@ -56,15 +89,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     pokemonCard.innerHTML = `
       <h3>${name}</h3>
       <div class="pokemon-image">
-      <img src="${image}" alt="${name}">
+        <img src="${image}" alt="${name}">
       </div>
       <div class="card-body">
-      <p><h4>Id:</h4> ${pokemonId}</p>
-      <p><h4>Wheight:</h4> ${weight}</p>
-      <p><h4>Types:</h4> ${types}</p>
-      <p><h4>Moves:</h4> ${moves}</p>
-      <p><h4>Ability:</h4> ${ability}</p>
-      <p><h4>Move Ailment:</h4> ${moveAilment}</p>
+        <p><h4>Id:</h4> ${pokemonId}</p>
+        <p><h4>Weight:</h4> ${weight}</p>
+        <p><h4>Types:</h4> ${types}</p>
+        <p><h4>Moves:</h4> ${moves}</p>
+        <p><h4>Ability:</h4> ${ability}</p>
+        <p><h4>Move Ailment:</h4> ${moveAilment}</p>
       </div>
     `;
     pokemonContainer.appendChild(pokemonCard);
@@ -88,11 +121,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getTypes(pokemon) {
-    return pokemon.types?.map(type => type.type.name).join(', ') || "N/A";
+    if (Array.isArray(pokemon.types)) {
+      return pokemon.types.map(type => type.type.name).join(', ') || "N/A";
+    } else {
+      return "N/A";
+    }
   }
 
   function getMoves(pokemon) {
-    return pokemon.moves?.slice(0, 4).map(move => move.move.name).join(', ') || "N/A";
+    if (Array.isArray(pokemon.moves)) {
+      return pokemon.moves.slice(0, 4).map(move => move.move.name).join(', ') || "N/A";
+    } else {
+      return "N/A";
+    }
   }
 
   function getAbility(pokemon) {
@@ -100,8 +141,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getMoveAilment(pokemon) {
-    return pokemon.moves?.length > 0 && pokemon.moves[0].version_group_details.length > 0
-      ? pokemon.moves[0].version_group_details[0].move_learn_method.name
-      : "N/A";
+    if (Array.isArray(pokemon.moves) && pokemon.moves.length > 0) {
+      if (
+        Array.isArray(pokemon.moves[0].version_group_details) &&
+        pokemon.moves[0].version_group_details.length > 0
+      ) {
+        return pokemon.moves[0].version_group_details[0].move_learn_method.name;
+      }
+    }
+
+    return "N/A";
   }
 });
