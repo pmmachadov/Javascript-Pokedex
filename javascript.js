@@ -1,155 +1,90 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  // SearchBar
-  let pokemons = {};
 
-  // Add the search functionality
-  const searchInput = document.getElementById("search_input");
-  const searchButton = document.getElementById("search_button");
+// define buttons, input line
+let btn = document.getElementsByTagName("button")[0];
+let input = document.getElementById("userinput");
+let rand_btn = document.getElementById("random");
+const pokemon_html = document.querySelector('.pokemon')
 
-  searchButton.addEventListener("click", () => {
-    const searchTerm = searchInput.value.trim().toLowerCase();
 
-    // Verificar si el campo de búsqueda está vacío o solo contiene espacios
-    if (!searchTerm) {
-      return;
-    }
+const SearchPokemon = (api_obj) => {
 
-    // Filter Pokémon that match the search term
-    const filteredPokemon = Object.values(pokemons).filter(pokemon => {
-      const pokemonName = pokemon.name.toLowerCase();
-      const pokemonId = String(pokemon.id);
+  const { url, type, name } = api_obj //destructured object
+  const api_url = `${url}${type}/${name}` //URL string
 
-      return pokemonName.includes(searchTerm) || pokemonId.includes(searchTerm);
-    });
+  fetch(api_url)
+    .then((raw_data) => raw_data.json())
+    .then((data) => changeHtml(data))
+    .catch((err) => { //if some error happens, it shows the following message
+      pokemon_html.innerHTML =
+        `<h1> Some Error Occured.. Please revise your code! </h1>`;
+    })
 
-    // Clear the container before showing the search results
-    const pokemonContainer = document.getElementById("pokemon_container");
-    pokemonContainer.innerHTML = "";
+  const changeHtml = (data) => {
 
-    // Show the search results
-    filteredPokemon.forEach(pokemon => {
-      processPokemon(pokemon);
-    });
-  });
-
-  // Cards
-
-  const url = `https://pokeapi.co/api/v2/pokemon?limit=1000`; // Cambiado a límite 1000 para obtener todos los Pokémon
-
-  try {
-    const response = await fetch(url);
-    if (response.status === 200) {
-      const data = await response.json();
-
-      await Promise.all(data.results.map(async (pokemonData) => {
-        const pokemon = await fetchPokemonDetails(pokemonData.url);
-        await processPokemon(pokemon);
-      }));
-    } else {
-      console.error("Failed to fetch data");
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-
-  async function fetchPokemonDetails(url) {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  }
-
-  async function processPokemon(pokemon) {
-    const image = getImage(pokemon);
-    const name = getName(pokemon);
-    const pokemonId = getPokemonId(pokemon);
-    const weight = getWeight(pokemon);
-    const types = getTypes(pokemon);
-    const moves = getMoves(pokemon);
-    const ability = getAbility(pokemon);
-    const moveAilment = getMoveAilment(pokemon);
-
-    // Crear un objeto con la información
-    const pokemonInfo = {
-      name: name,
-      image: image,
-      weight: weight,
-      types: types,
-      moves: moves,
-      ability: ability,
-      moveAilment: moveAilment
-    };
-
-    // Almacenar información en el objeto
-    pokemons[pokemonId] = pokemonInfo;
-
-    // Display information in the HTML
-    const pokemonContainer = document.getElementById("pokemon_container");
-    const pokemonCard = document.createElement("div");
-    pokemonCard.className = "card";
-    pokemonCard.innerHTML = `
-      <h3>${name}</h3>
-      <div class="pokemon-image">
-        <img src="${image}" alt="${name}">
-      </div>
-      <div class="card-body">
-        <p><h4>Id:</h4> ${pokemonId}</p>
-        <p><h4>Weight:</h4> ${weight}</p>
-        <p><h4>Types:</h4> ${types}</p>
-        <p><h4>Moves:</h4> ${moves}</p>
-        <p><h4>Ability:</h4> ${ability}</p>
-        <p><h4>Move Ailment:</h4> ${moveAilment}</p>
-      </div>
-    `;
-    pokemonContainer.appendChild(pokemonCard);
-  }
-
-  // Funciones auxiliares para reducir la complejidad
-  function getImage(pokemon) {
-    return pokemon.sprites?.front_default || "N/A";
-  }
-
-  function getName(pokemon) {
-    return pokemon.name || "N/A";
-  }
-
-  function getPokemonId(pokemon) {
-    return pokemon.id || "N/A";
-  }
-
-  function getWeight(pokemon) {
-    return pokemon.weight || "N/A";
-  }
-
-  function getTypes(pokemon) {
-    if (Array.isArray(pokemon.types)) {
-      return pokemon.types.map(type => type.type.name).join(', ') || "N/A";
-    } else {
-      return "N/A";
-    }
-  }
-
-  function getMoves(pokemon) {
-    if (Array.isArray(pokemon.moves)) {
-      return pokemon.moves.slice(0, 4).map(move => move.move.name).join(', ') || "N/A";
-    } else {
-      return "N/A";
-    }
-  }
-
-  function getAbility(pokemon) {
-    return pokemon.abilities?.length > 0 ? pokemon.abilities[0].ability.name : "N/A";
-  }
-
-  function getMoveAilment(pokemon) {
-    if (Array.isArray(pokemon.moves) && pokemon.moves.length > 0) {
-      if (
-        Array.isArray(pokemon.moves[0].version_group_details) &&
-        pokemon.moves[0].version_group_details.length > 0
-      ) {
-        return pokemon.moves[0].version_group_details[0].move_learn_method.name;
+    let new_stats = [];
+    const get_stats = () => {
+      for (i = 0; i < data.stats.length; i++) {
+        new_stats += [`<p> ${data.stats[i].stat.name} has base-stat of <span class="out">${data.stats[i].base_stat}</span> </p>`];
       }
+      return new_stats
     }
+    const got_stats = get_stats() //to have all stats as one variable
 
-    return "N/A";
+    const newHtml = `
+		<div class = "details" align="center">
+			<h1 class= "name" > ${data.name} </h1>
+			<img src= "${data.sprites.other.dream_world.front_default ? data.sprites.other.dream_world.front_default : data.sprites.front_default ? data.sprites.front_default :
+        "https://thumbs.dreamstime.com/b/no-pokemon-here-sign-riga-latvia-july-restricted-area-over-white-background-go-very-popular-virtual-74549871.jpg"} " /> 
+			<h3> weight: <span class="out">${data.weight} hg </span> </h3>
+			<h3> height: <span class="out">${data.height} dm</span> </h3>
+			<h3> type: <span class="out">${data.types[0].type.name} </span> </h3>
+		</div>
+		<div class= "stats">
+				<h3>${data.name}'s stats: </h3>
+				${got_stats}
+		</div>`
+    pokemon_html.innerHTML = newHtml //add it into html
+    input.value = ""; //to reset the input line
   }
-});
+
+}
+
+function inputLength() { //checks if the input line input is not empty
+  return input.value.length;
+}
+
+function MakeUrl(value) { //creates the URL using "value"
+  const api_obj = {
+    url: "https://pokeapi.co/api/v2/",
+    type: "pokemon",
+    name: value,
+  }
+  return api_obj;
+}
+
+function getRandomInt(min, max) { //creates random integer
+  let rand_int = Math.floor(Math.random() * (max - min) + min);
+  console.log(rand_int);
+  return rand_int;
+}
+
+function Randomize(event) {
+  const search_value = getRandomInt(1, 897); //gets random integer between min and max of Pokemon IDs
+  SearchPokemon(MakeUrl(search_value)); //uses gotten integer as Pokemon ID and search
+}
+
+
+function SearchAfterClick(event) {
+  if (inputLength() > 0) {
+    SearchPokemon(MakeUrl(input.value)); //search Pokemon by using inputted value
+  }
+}
+
+function SearchAfterKeypress(event) {
+  if (inputLength() > 0 && event.keyCode === 13) { //checks the Enter keyboard command
+    SearchPokemon(MakeUrl(input.value)); //search Pokemon by using inputted value
+  }
+}
+btn.addEventListener("click", SearchAfterClick);
+input.addEventListener("keypress", SearchAfterKeypress);
+rand_btn.addEventListener("click", Randomize);

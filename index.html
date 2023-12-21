@@ -4,19 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Pokemon Information</title>
+  <link rel="stylesheet" type="text/css" href="./styles.css" />
+  <title>Document</title>
 </head>
 
 <body>
-  <div id="search_container">
-    <input type="text" id="search_input" placeholder="Search by ID or Name">
-    <button id="search_button">Search</button>
+  <div class="search zone">
+
+    <div class="searchBar">
+      <input id="userinput" class="searchTerm" type="text" placeholder="enter pokemon name or id..">
+      <button type="submit" class="searchButton"> Search</button>
+    </div>
+    <button type="submit" class="randButton" id="random"> Random Pokemon! </button>
   </div>
-  <div id="pokemon_container"></div>
+  <div class="pokemon zone">
 
-
-  <script src="./javascript.js"></script>
+    <script type="text/javascript" src="javascript.js"></script>
 </body>
 
 </html>
