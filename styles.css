@@ -1,38 +1,60 @@
-    body {
-        background-color: #f8f8f8;
-        color: #333;
-        font-family: Arial, sans-serif;
-        font-size: 16px;
-        margin: 0;
-        padding: 0;
-    }
+body {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
-    .search.zone {
-        background-color: #145885;
-        padding: 1.5rem;
-        text-align: center;
-    }
+.zone {
+    padding: 20px;
+    margin: 20px;
+    background-color: #34495e;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
 
-    .searchBar {
-        margin-bottom: 1.5rem;
-    }
+.card {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+}
 
-    .searchTerm {
-        border: 2px solid #000000;
-        border-radius: 0.5rem;
-        padding: 1rem;
-    }
+.searchBar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
 
-    .searchButton, .randButton {
-        background-color: #00a143;
-        border: none;
-        border-radius: 0.5rem;
-        color: #fff;
-        cursor: pointer;
-        padding: 1rem 2rem;
-    }
+.searchTerm {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px;
+}
 
-    .searchButton:hover, .randButton:hover {
-        background-color: #00a143;
-        color: #000000;
-    }
+.searchButton, .randButton {
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.searchButton:hover, .randButton:hover {
+    background-color: #2980b9;
+}
+
+#pokemon_container {
+    width: 100%;
+    box-sizing: border-box;
+}
