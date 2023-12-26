@@ -3,6 +3,8 @@ let input = document.getElementById("userinput");
 let rand_btn = document.getElementById("random");
 const pokemon_html = document.querySelector('.pokemon')
 
+const pokemons = {};
+
 const SearchPokemon = (api_obj) => {
   const { url, type, name } = api_obj;
   const api_url = `${url}${type}/${name}`;
@@ -58,7 +60,6 @@ function MakeUrl(value) {
 
 function getRandomInt(min, max) {
   let rand_int = Math.floor(Math.random() * (max - min) + min);
-  console.log(rand_int);
   return rand_int;
 }
 
@@ -82,29 +83,44 @@ btn.addEventListener("click", SearchAfterClick);
 input.addEventListener("keypress", SearchAfterKeypress);
 rand_btn.addEventListener("click", Randomize);
 
-
 // Cards
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const numberOfPokemon = 10;
-  const url = `https://pokeapi.co/api/v2/pokemon/?limit=${numberOfPokemon}`;
-  let pokemons = {};
+  const pokemonContainer = document.getElementById("pokemon_container");
+  const loadMoreBtn = document.getElementById("load_more");
+  const numberOfPokemonPerPage = 6;
+  let offset = 0;
 
-  try {
-    const response = await fetch(url);
-    if (response.status === 200) {
-      const data = await response.json();
+  async function fetchAndProcessPokemonBatch() {
+    const url = `https://pokeapi.co/api/v2/pokemon/?limit=${numberOfPokemonPerPage}&offset=${offset}`;
+    try {
+      const response = await fetch(url);
+      if (response.status === 200) {
+        const data = await response.json();
 
-      await Promise.all(data.results.map(async (pokemonData) => {
-        const pokemon = await fetchPokemonDetails(pokemonData.url);
-        await processPokemon(pokemon);
-      }));
-    } else {
-      console.error("Failed to fetch data");
+        await Promise.all(data.results.map(async (pokemonData, index) => {
+          const pokemon = await fetchPokemonDetails(pokemonData.url);
+          await processPokemon(pokemon);
+        }));
+
+        lazyLoadImages();
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
-  } catch (error) {
-    console.error("Error:", error);
+
+    offset += numberOfPokemonPerPage;
   }
+
+  // Initial load
+  await fetchAndProcessPokemonBatch();
+
+  // Load more button click event
+  loadMoreBtn.addEventListener("click", async () => {
+    await fetchAndProcessPokemonBatch();
+  });
 
   async function fetchPokemonDetails(url) {
     const response = await fetch(url);
@@ -113,32 +129,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function processPokemon(pokemon) {
-    try {
-      const image = getImage(pokemon);
-      const name = getName(pokemon);
-      const pokemonId = getPokemonId(pokemon);
-      const weight = getWeight(pokemon);
-      const types = getTypes(pokemon);
-      const moves = getMoves(pokemon);
-      const ability = getAbility(pokemon);
-      const moveAilment = getMoveAilment(pokemon);
+    const image = getImage(pokemon);
+    const name = getName(pokemon);
+    const pokemonId = getPokemonId(pokemon);
+    const weight = getWeight(pokemon);
+    const types = getTypes(pokemon);
+    const moves = getMoves(pokemon);
+    const ability = getAbility(pokemon);
+    const moveAilment = getMoveAilment(pokemon);
 
-      const pokemonInfo = {
-        name: name,
-        image: image,
-        weight: weight,
-        types: types,
-        moves: moves,
-        ability: ability,
-        moveAilment: moveAilment
-      };
+    const pokemonInfo = {
+      name: name,
+      image: image,
+      weight: weight,
+      types: types,
+      moves: moves,
+      ability: ability,
+      moveAilment: moveAilment
+    };
 
-      pokemons[pokemonId] = pokemonInfo;
+    pokemons[pokemonId] = pokemonInfo;
 
-      const pokemonContainer = document.getElementById("pokemon_container");
-      const pokemonCard = document.createElement("div");
-      pokemonCard.className = "card";
-      pokemonCard.innerHTML = `
+    const pokemonCard = document.createElement("div");
+    pokemonCard.className = "card";
+    pokemonCard.innerHTML = `
       <h3>${name}</h3>
       <div class="pokemon-image">
         <img data-src="${image}" alt="${name}" loading="lazy">
@@ -152,10 +166,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p><h4>Move Ailment:</h4> ${moveAilment}</p>
       </div>
     `;
-      pokemonContainer.appendChild(pokemonCard);
-    } catch (error) {
-      console.error("Error processing Pokemon:", error);
-    }
+    pokemonContainer.appendChild(pokemonCard);
   }
 
   function lazyLoadImages() {
@@ -183,13 +194,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       observer.observe(img);
     });
   } else {
-    // Elimina la siguiente línea si decides no usar lazyLoadImages
     lazyLoadImages();
   }
 
   function getImage(pokemon) {
     return pokemon.sprites?.other?.dream_world?.front_default || "N/A";
-
   }
 
   function getName(pokemon) {

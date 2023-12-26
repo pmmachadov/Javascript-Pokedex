@@ -1,19 +1,33 @@
 body {
-    background-color: #2c3e50;
+    background-color: #000000;
     color: #ecf0f1;
     font-family: 'Arial', sans-serif;
+    font-size: 16px;
     margin: 0;
     padding: 0;
 }
 
+h3 {
+    color: #f2c000;
+    display: flex;
+    font-size: 1.7rem;
+    justify-content: center;
+    margin: 2rem;
+    text-transform: uppercase;
+}
+
+img {
+    width: 12rem;
+}
+
 .zone {
-    background-color: #34495e;
+    background-color: #1c2a37;
     border-radius: 8px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin: 20px;
-    padding: 20px;
+    margin: 1.25rem;
+    padding: 1.25rem;
 }
 
 .card {
@@ -21,40 +35,51 @@ body {
     border-radius: 8px;
     box-sizing: border-box;
     color: #ecf0f1;
-    margin: 10px;
-    padding: 20px;
-    width: calc(33.33% - 20px);
+    margin: 0.625rem;
+    padding: 1.25rem;
+    width: calc(33.33% - 2rem);
 }
 
 .searchBar {
     align-items: center;
     display: flex;
-    margin-bottom: 20px;
+    justify-content: center;
+    margin-bottom: 1.25rem;
     width: 100%;
 }
 
 .searchTerm {
     border: none;
-    border-radius: 4px;
-    flex: 1;
-    margin-right: 10px;
-    padding: 8px;
+    border-radius: 0.25rem;
+    flex: 0.5;
+    margin-right: 0.625rem;
+    padding: 0.5rem;
 }
 
-.searchButton, .randButton {
-    background-color: #3498db;
+.searchButton, .randButton, #load_more {
+    background-color: #16669b;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     color: #fff;
     cursor: pointer;
-    padding: 8px 16px;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
 }
 
-.searchButton:hover, .randButton:hover {
-    background-color: #2980b9;
+#load_more:hover, .searchButton:hover, .randButton:hover {
+    background-color: #e1b000;
+    color: #000000;
 }
 
 #pokemon_container {
     box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     width: 100%;
+}
+
+.pokemon-image {
+    display: flex;
+    justify-content: center;
 }
