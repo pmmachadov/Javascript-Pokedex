@@ -153,21 +153,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     const pokemonCard = document.createElement("div");
     pokemonCard.className = "card";
     pokemonCard.innerHTML = `
-      <h3>${name}</h3>
-      <div class="pokemon-image">
-        <img data-src="${image}" alt="${name}" loading="lazy">
-      </div>
-      <div class="card-body">
-        <p><h4>ID:</h4> ${pokemonId}</p>
-        <p><h4>Weight:</h4> ${weight}</p>
-        <p><h4>Types:</h4> ${types}</p>
-        <p><h4>Moves:</h4> ${moves}</p>
-        <p><h4>Ability:</h4> ${ability}</p>
-        <p><h4>Move Ailment:</h4> ${moveAilment}</p>
-      </div>
+        <h3>${name}</h3>
+        <div class="pokemon-image">
+            <img data-src="${image}" alt="${name}" loading="lazy">
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> ${pokemonId}</p>
+            <p><strong>Weight:</strong> ${weight}</p>
+            <p><strong>Types:</strong> ${types}</p>
+            <p><strong>Moves:</strong> ${moves}</p>
+            <p><strong>Ability:</strong> ${ability}</p>
+            <p><strong>Move Ailment:</strong> ${moveAilment}</p>
+        </div>
     `;
     pokemonContainer.appendChild(pokemonCard);
   }
+
 
   function lazyLoadImages() {
     const images = document.querySelectorAll('img[data-src]');

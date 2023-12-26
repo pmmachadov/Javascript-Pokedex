@@ -8,7 +8,7 @@ body {
 }
 
 h3 {
-    color: #f2c000;
+    color: #00a8ab;
     display: flex;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 1.7rem;
@@ -83,4 +83,16 @@ img {
 .pokemon-image {
     display: flex;
     justify-content: center;
+}
+
+@media screen and (max-width: 1200px) {
+    .card {
+        width: calc(50% - 2rem);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .card {
+        width: calc(100% - 2rem);
+    }
 }
