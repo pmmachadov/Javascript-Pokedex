@@ -10,6 +10,7 @@ body {
 h3 {
     color: #f2c000;
     display: flex;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 1.7rem;
     justify-content: center;
     margin: 2rem;
