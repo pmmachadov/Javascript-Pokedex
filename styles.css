@@ -39,7 +39,19 @@ img {
     margin: 0.625rem;
     padding: 1.25rem;
     width: calc(33.33% - 2rem);
+    display: flex;
+    flex-direction: column;
 }
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body p {
+    margin: 0;
+}
+
 
 .searchBar {
     align-items: center;
