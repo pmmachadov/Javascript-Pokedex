@@ -15,7 +15,7 @@ export const initializeSearchHandlers = () => {
     randomButton.addEventListener("click", randomPokemon);
 
     userInput.addEventListener("keypress", (event) => {
-        if (event.keyCode === 13 && userInput.value.length > 0) {
+        if (event.key === "Enter" && userInput.value.length > 0) {
             searchPokemon(userInput.value);
             userInput.value = "";
         }
