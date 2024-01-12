@@ -47,6 +47,7 @@ img {
     margin: 0.625rem;
     padding: 1.25rem;
     width: calc(33.33% - 1.25rem);
+    justify-content: space-between;
 }
 
 .card-body {
